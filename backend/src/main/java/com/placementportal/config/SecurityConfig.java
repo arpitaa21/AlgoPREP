@@ -43,7 +43,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()          // CORS pre-flight
                 .requestMatchers("/error").permitAll()
-                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/health").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")               // role-based access
                 .anyRequest().authenticated())
             .exceptionHandling(e -> e

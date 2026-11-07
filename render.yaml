@@ -1,0 +1,45 @@
+databases:
+  - name: algoprep-db
+    databaseName: algoprep
+    user: algoprep
+    plan: free
+    region: singapore
+
+services:
+  - type: web
+    name: algoprep-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/health
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: algoprep-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: algoprep-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: algoprep-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: algoprep-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: algoprep-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_ENABLED
+        value: "false"
+      - key: CORS_ORIGINS
+        value: https://algoprep-arpitaa21.vercel.app
+      - key: DDL_AUTO
+        value: update
