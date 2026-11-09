@@ -24,7 +24,7 @@ docker compose up -d                       # or: mysql -u root -p < db/schema.sq
 cd backend && mvn spring-boot:run
 
 # 3. frontend (http://localhost:5173)  - in a second terminal
-cd frontend && npm install && npm run dev
+cd frontend && npm ci && npm run dev
 
 # 4. (optional) verify the running API end-to-end
 bash scripts/smoke-test.sh

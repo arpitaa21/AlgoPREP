@@ -361,18 +361,16 @@ Run: `cd backend && mvn test` (needs internet once to download dependencies).
 
 ## 8. Verification status (honest)
 
-I built this in a sandbox that blocks Maven Central and the npm registry, so **I could not run `mvn test`,
-start Spring Boot, or `npm install`.** What was actually checked, and what was not:
+Verified from the project root on 2026-11-09:
 
 | Check | Result |
 |---|---|
-| Recommender + streak logic compiled with `javac` and run against 22 assertions | passed |
-| All 30 frontend JSX/JS files parsed and bundled with esbuild (imports and named exports resolve) | passed |
-| Every `xxxApi.fn()` used by pages exists in `endpoints.js` | passed |
-| Every URL the frontend calls exists as a backend route (49/49) | passed |
-| Every entity column and join table exists in `db/schema.sql` | passed |
-| Backend traced by hand against Spring Boot 3.5 / Hibernate 6 / JJWT 0.12 APIs; two frontend bugs found and fixed this way | done, **not a compiler** |
-| `mvn test`, application start-up against MySQL, `smoke-test.sh` | **not run: please run these first** |
+| `cd backend && mvn test` | passed: 39 tests, 0 failures/errors (unit tests plus Spring Boot + MockMvc + H2 integration tests) |
+| `cd frontend && npm ci && npm run build` | passed: Vite production bundle generated |
+| Live database startup and `scripts/smoke-test.sh` | not run: Docker is not installed in this environment, so MySQL was unavailable |
+| npm dependency audit | install reported 6 advisories (1 moderate, 5 high); review with `npm audit` before deployment and upgrade deliberately |
 
-On your machine, run in this order: `cd backend && mvn test`, then the four commands in `README.md`, then
-`bash scripts/smoke-test.sh`. If any step fails, send me the first error and I will fix it.
+The automated integration tests exercise the real Spring security chain and JPA mappings on H2, but this does
+not replace one final startup and smoke test against MySQL 8. Start MySQL using the compose command in the
+README, start the backend and frontend, then run `bash scripts/smoke-test.sh` from the project root. In
+production, replace the sample admin credentials and JWT secret, use HTTPS, and review npm audit findings.
